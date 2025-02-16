@@ -1,7 +1,12 @@
-import numpy as np
-from scipy.linalg import sqrtm
+import sys
 
+if __name__ == '__main__':
+    n = int(input())
+    inputF = sys.stdin.readline
+    arr = []
+    for _ in range(n):
+        arr.append(int(inputF().rstrip()))
 
-
-n,x=input().split()
-print(int(n,int(x)))
+    arr.sort()
+    for i in arr:
+        print(i)
