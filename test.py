@@ -1,14 +1,35 @@
-import sys
-sys.stdin = open("input.txt", "r")
+# n, k = map(int, input().split())
+# hour = 0
+# minute = 0
+# second = 0
+# cnt = 0
+# # 오류: 23시 59분 59초가 포함이 안되어있기 때문에 잘못 작성된 코드다.
+# while hour != n or minute != 59 or second != 59:
+#     if str(k) in str(hour) or str(k) in str(minute) or str(k) in str(second):
+#         cnt += 1
+#
+#     second += 1
+#     if second >= 60:
+#         second = 0
+#         minute += 1
+#     if minute >= 60:
+#         minute = 0
+#         hour += 1
+#
+# print(cnt)
+n, k = map(int, input().split())
 
-T = int(input())
-# 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
-for test_case in range(1, T + 1):
-    li = map(int, input().split())
-    num_sum = 0
+cnt = 0
+for h in range(n+1):
+    for m in range(60):
+        for s in range(60):
+            if len(str(h)) == 1:
+                h = '0' + str(h)
+            if len(str(m)) == 1:
+                m = '0' + str(m)
+            if len(str(s)) == 1:
+                s = '0' + str(s)
+            if str(k) in str(h) + str(m) + str(s):
+                cnt += 1
 
-    for i in li:
-        if i % 2 != 0:
-            num_sum += i
-
-    print("#" + str(test_case) + " " + str(num_sum))
+print(cnt)
