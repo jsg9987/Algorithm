@@ -23,20 +23,13 @@ cnt = 0
 for h in range(n+1):
     for m in range(60):
         for s in range(60):
-            str_time = ""
             if len(str(h)) == 1:
-                str_time += '0' + str(h)
-            else:
-                str_time += str(h)
+                h = '0' + str(h)
             if len(str(m)) == 1:
-                str_time += '0' + str(m)
-            else:
-                str_time += str(m)
+                m = '0' + str(m)
             if len(str(s)) == 1:
-                str_time += '0' + str(s)
-            else:
-                str_time += str(s)
-            if str(k) in str_time:
+                s = '0' + str(s)
+            if str(k) in str(h) + str(m) + str(s):
                 cnt += 1
 
 print(cnt)
