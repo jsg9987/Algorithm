@@ -24,7 +24,7 @@ arr.sort()
 
 idx = binary_search(arr, m, 0, len(arr) - 1)
 temp_m = 0
-for cut_height in range(arr[idx], arr[idx + 1] + 1):
+for cut_height in range(arr[idx], arr[idx + 1] + 1): # 마지막 인덱스 list out of range
     for x in arr:
         if x - cut_height <= 0:
             temp_m += 0
