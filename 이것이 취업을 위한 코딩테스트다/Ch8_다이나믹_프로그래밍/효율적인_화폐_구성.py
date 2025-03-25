@@ -7,6 +7,8 @@ for _ in range(n):
     coin.append(int(inputF().rstrip()))
 
 d = [10001] * 10001
+# 0원은 하나도 안썼을 때 만들 수 있다.
+d[0] = 0
 for i in coin:
     d[i] = 1
 
