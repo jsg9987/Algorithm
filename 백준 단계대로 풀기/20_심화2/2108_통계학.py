@@ -23,3 +23,24 @@ else:
     print(cnt[0][0])
 print(num_range)
 
+
+"""또 다른 최빈값 구하는 방법
+딕셔너리를 이용해서 각 원소들의 빈도를 저장한다.
+dic = dict()
+for i in nums:
+    if i in dic:
+        dic[i] += 1
+    else:
+        dic[i] = 1
+
+mx = max(dic.values())
+mx_dic = []
+
+for i in dic:
+    if mx == dic[i]:
+        mx_dic.append(i)
+        
+if len(mx_dic) > 1:
+    print(mx_dic[1])
+else:
+    print(mx_dic[0])"""
