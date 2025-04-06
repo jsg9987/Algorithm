@@ -10,7 +10,7 @@ for k in range(len(op_num)):
     for _ in range(op_num[k]):
         operators.append(op_list[k])
 
-candidates = list(permutations(operators, n-1))
+candidates = set(permutations(operators, n-1))
 
 max_value = -int(1e9)
 min_value = int(1e9)
