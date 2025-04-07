@@ -13,7 +13,7 @@ def dfs(start):
         return
     for i in range(start, n+1):
         s.append(i)
-        dfs(start)
+        dfs(i)
         s.pop()
 
 dfs(1)
