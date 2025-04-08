@@ -1,35 +1,40 @@
-from itertools import permutations
-
+# 함수 종료 조건: 연산자 모두 사용 후 최대, 최소값 갱신
 n = int(input())
 nums = list(map(int, input().split()))
-# 덧셈,뺄셈, 곱셈, 나눗셈 개수
-op_num = list(map(int, input().split()))
-op_list = ['+', '-', '*', '//']
-operators = []
-for k in range(len(op_num)):
-    for _ in range(op_num[k]):
-        operators.append(op_list[k])
+add, sub, mul, div = map(int, input().split())
 
-candidates = set(permutations(operators, n-1))
-
-max_value = -int(1e9)
 min_value = int(1e9)
-for candidate in candidates:
-    result = nums[0]
-    for i in range(n-1):
-        oper = candidate[i]
-        if oper == '+':
-            result += nums[i+1]
-        elif oper == '-':
-            result -= nums[i+1]
-        elif oper == '*':
-            result *= nums[i+1]
-        elif oper == '//':
-            result = int(result/ nums[i+1])
-    if result > max_value:
-        max_value = result
-    if result < min_value:
-        min_value = result
+max_value = -int(1e9)
+result = nums[0]
 
+
+def dfs(i, result):
+    global min_value, max_value
+    global add, sub, mul, div
+
+    if i == n:
+        min_value = min(result, min_value)
+        max_value = max(result, max_value)
+        return
+
+    if add > 0:
+        add -= 1
+        dfs(i+1, result + nums[i])
+        add += 1
+    if sub > 0:
+        sub -= 1
+        dfs(i+1, result - nums[i])
+        sub += 1
+    if mul > 0:
+        mul -= 1
+        dfs(i+1, result * nums[i])
+        mul += 1
+    if div > 0:
+        div -= 1
+        dfs(i+1, int(result / nums[i]))
+        div += 1
+
+
+dfs(1, result)
 print(max_value)
 print(min_value)
