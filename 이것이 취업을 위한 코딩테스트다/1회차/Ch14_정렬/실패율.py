@@ -1,4 +1,4 @@
-# 4/14 17:28 ~
+# 4/14 17:28 ~ 18:03
 # 실패율 = 스테이지 도달했으나 아직 클리어 x 플레이어 수 / 스테이지 도달 플레이어 수
 # 실패율이 높은 스테이지부터 "내림차순"으로 스테이지 번호가 담긴 배열 return
 # 1 <= N <= 500, 1 <= stages <= 200,000
@@ -15,7 +15,7 @@ def solution(N, stages):
         if stage != N + 1:
             not_clear[stage - 1] += 1
         for i in range(stage):
-            if i == N-1:
+            if i == N:
                 break
             arrival[i] += 1
 
