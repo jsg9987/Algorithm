@@ -1,10 +1,8 @@
 # 4/17 22:25~
-# dfs 사용
+# dfs 사용 -> 주의점 DFS로 풀기 전에 최대 재귀 횟수 예측하기!
 # 틀린점: 비가 오지 않을 수도 있다.-> 아무 지역도 물에 잠기지 않을 수 있다.
 import copy
 from sys import setrecursionlimit
-
-setrecursionlimit(10**6)
 
 def set_board(board, height):
     temp_board = copy.deepcopy(board)
