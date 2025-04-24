@@ -9,7 +9,7 @@ for tc in range(1, 11):
         for j in range(8 - word_len + 1):
             word = row[j:j + word_len]
             word_reverse = word[::-1]
-            if word == word_reverse:
+            if word == word_reverse: # if word == word[::-1]로 개선 가능
                 result += 1
 
     for i in range(8):
