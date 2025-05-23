@@ -1,23 +1,28 @@
-import sys
+# 18:04 ~
 
-def find_num(num):
+def get_line(x):
     line = 1
-    a = 0
-    b = 0
-
-    while num > line:
-        num -= line
+    while x > line:
+        x -= line
         line += 1
 
-    if line % 2 == 0:
-        a = num
-        b = line - num + 1
-    elif line % 2 != 0:
-        a = line - num + 1
-        b = num
+    return line, x
 
-    return str(a) + '/' + str(b)
 
-if __name__ == '__main__':
-    num = int(input())
-    print(find_num(num))
+x = int(input())
+num = 0
+cnt = 0
+i,j = 0,0
+line, order = get_line(x)
+if line % 2 != 0:
+    i = line
+    j = 1
+    i -= order -1
+    j += order -1
+else:
+    i = 1
+    j = line
+    i += order - 1
+    j -= order - 1
+
+print(f"{i}/{j}")
