@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+// 핵심 아이디어: 9!은 약 360만이기 때문에 6초 내에 완전탐색이 가능하다. dfs와 백트래킹을 사용해서 완전탐색
+// JAVA 언어 27,776 kb 메모리 1,598 ms 실행시간 / D3
 public class Solution {
-	static int allSum;
 	static int winCnt;
 	static int loseCnt;
 	static int[] inyung = null;
@@ -24,27 +25,20 @@ public class Solution {
 			inyung = new int[9];
 			winCnt = 0;
 			loseCnt = 0;
-			allSum = 0;
-			int[] all = new int[18];
-			for (int i = 1; i < 19; i++) {
-				all[i - 1] = i;
-				allSum += i;
-			}
+			boolean[] cardCheck = new boolean[19];
 
 			// 배열 초기화
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < 9; i++) {
 				gyung[i] = Integer.parseInt(st.nextToken());
-				all[gyung[i] - 1] = 0;
-				allSum += gyung[i];
+				cardCheck[gyung[i]] = true;
 			}
 
 			int idx = 0;
-			for (int i = 0; i < 18; i++) {
-				if (all[i] != 0) {
-					inyung[idx] = all[i];
-					idx++;
-				}
+			for (int i = 1; i < 19; i++) {
+				if(cardCheck[i]) continue;
+				inyung[idx] = i;
+				idx++;
 			}
 
 //			System.out.println(Arrays.toString(gyung));
