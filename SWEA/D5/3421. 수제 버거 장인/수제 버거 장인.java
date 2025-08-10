@@ -45,8 +45,8 @@ public class Solution {
 
 			// 첫 번째 재료부터 재료를 추가하는 조합 탐색 시작
 			// 1번 부터 N번 재료까지 탐색
-//			dfs(1);
-			int result = countValidBurgers();
+			dfs(1);
+//			int result = countValidBurgers();
 
 			System.out.printf("#%d %d\n", tc, result);
 		}
