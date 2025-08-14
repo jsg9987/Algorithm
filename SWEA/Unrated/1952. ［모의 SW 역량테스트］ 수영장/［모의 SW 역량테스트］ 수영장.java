@@ -42,19 +42,16 @@ public class Solution {
 			minSum[12] = Math.min(sum, minSum[12]);
 			return;
 		}
+		
+		// 가지치기
+		if(sum >= minSum[month]) return;
+		minSum[month] = sum;
 
-		// 4가지 요금으로 백트래킹
+		// 4가지 요금으로 dfs + 백트래킹
 		for (int i = 0; i < 4; i++) {
 			int nextMonth = month + durations[i];
-			int nextCost = nextCost(month, i);
-			if (nextMonth <= 12) { // 1년 넘어가지 않으면
-				if (sum + nextCost < minSum[nextMonth]) {
-					minSum[nextMonth] = Math.min(minSum[nextMonth], sum + nextCost);
-					dfs(nextMonth, sum + nextCost);
-				}
-			} else {
-				dfs(nextMonth, sum + nextCost);
-			}
+			int nextSum = sum + nextCost(month, i);
+			dfs(nextMonth, nextSum);
 		}
 	}
 
