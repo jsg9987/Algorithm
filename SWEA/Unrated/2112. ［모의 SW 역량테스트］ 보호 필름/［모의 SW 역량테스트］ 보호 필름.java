@@ -1,5 +1,9 @@
 // 5초, 256MB, T = 50, 1 <= D <= 13, 1 <= W <= 20, 약품없이 통과는 0 출력
-// 완탐 연산량 8000만, 최소 투입횟수보다 크면 가지치기, 안넣거나 / A / B
+// 완탐 연산량 8000만, 최소 투입횟수보다 크면 가지치기, dfs 안넣거나 / A / B , 가지치기 필요
+
+// 핵심 아이디어: dfs 내에서 성능 통과 로직
+// 19:58 ~ 20:56
+// 디버깅해서 찾은 부분: 다음 재귀에서 possible을 체크하기 때문에 idx+1까지는 검사해줘야함. 따라서 row = D일때 체크하고 return하도록 기저조건 <-> 범위벗어나는 조건 순서 바꿈.
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,6 +58,7 @@ public class Solution {
 		if(row >= D) return;
 
 		// 가지치기
+		if(cnt >= minResult) return;
 
 		// A 포함하는 경우
 		int[] temp = new int[W];
