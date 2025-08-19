@@ -1,13 +1,35 @@
-T = int(input())
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-for tc in range(1, T+1):
-    n, m = map(int, input().split())
-    binary = format(m, 'b').zfill(n)
-
-    result = "ON"
-    for i in range(1,n+1):
-        if binary[-i] == '0':
-            result = "OFF"
-            break
-
-    print(f"#{tc} {result}")
+/*
+ * int형 자연수를 비트마스킹을 통해 비트 비교
+ */
+public class Solution {
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine().trim());
+		
+		for(int tc = 1; tc < T+1; tc++) {
+			StringTokenizer st = new StringTokenizer(br.readLine().trim());
+			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
+			
+			boolean flag = true;
+			for(int i = 0; i < N; i++) {
+				if((M & (1 << i)) == 0) {
+					flag = false;
+					break;
+				}
+			}
+			if(!flag) {
+				System.out.printf("#%d OFF\n", tc);
+			}else {
+				System.out.printf("#%d ON\n", tc);
+			}
+			
+		}
+		
+	}
+}
