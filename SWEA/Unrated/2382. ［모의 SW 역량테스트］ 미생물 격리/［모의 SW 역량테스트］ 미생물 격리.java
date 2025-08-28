@@ -3,120 +3,128 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import org.omg.CORBA.INTERNAL;
+/*
+ * 유형: 시뮬레이션
+ * 기능
+ * 1. 군집 이동
+ * - 1시간마다 군집 이동
+ * - 약품 처리: 절반이 죽고, 이동방향이 반대로 바뀜. 0이되면 소멸!
+ * - 군집 병합: 두 개 이상의 군집이 한 셀에 모이면 합쳐짐. 이동방향은 max 따라감.
+ * 
+ */
+
+class Micro {
+	int x, y, cnt, dir, total;
+	boolean isDead;
+
+	public Micro(int x, int y, int cnt, int dir) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.total = this.cnt = cnt;
+		this.dir = dir;
+	}
+}
 
 public class Solution {
-	
-	static class Micro {
-		int r, c, cnt, dir, total;
-		boolean isDead;
-		
-		public Micro(int r, int c, int cnt, int dir) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.cnt = cnt;
-			this.dir = dir;
-			this.total = cnt;
-		}
-	}
-	static int N,M,K; 
-	static int[] dr = {0,-1,1,0,0};
-	static int[] dc = {0,0,0,-1,1};
-	static Micro[] list;
-	static Micro[][] map;
-	
-	public static void main(String[] args) throws IOException{
+	static int[] dx = { 0, -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, 0, -1, 1 };
+	static int N;
+	static Micro[][] board;
+
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine().trim());
-		
-		for(int tc = 1; tc < T+1; tc++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken()); // 맵크기 5 <= N <= 100
-			M = Integer.parseInt(st.nextToken()); // 시간 1 <= M <= 1000
-			K = Integer.parseInt(st.nextToken()); // 초기 군집 수 5 <= K <= 1000
-			
-			// 전체 군집 리스트(죽은 군집(통합되어진 군집), 살아있는 군집 다 포함됨.) : 크기 변화 없음: 배열 가능
-			list = new Micro[K];
-			
-			// 매시간마다 각 셀에 이동한 미생물 정보
-			map = new Micro[N][N];
-			
-			for(int i = 0; i < K; i++) {
-				st = new StringTokenizer(br.readLine());
-				list[i] = new Micro(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+		for (int tc = 1; tc < T + 1; tc++) {
+			StringTokenizer st = new StringTokenizer(br.readLine().trim());
+
+			N = Integer.parseInt(st.nextToken()); // 셀의 개수 5 <= N <= 100
+			int M = Integer.parseInt(st.nextToken()); // 시간 1 <= M <= 1000
+			int K = Integer.parseInt(st.nextToken()); // 군집 수 5 <= K <= 1000
+			Micro[] micros = new Micro[K];
+			board = new Micro[N][N]; // board
+
+			// K개의 군집 받기
+			for (int i = 0; i < K; i++) {
+				st = new StringTokenizer(br.readLine().trim());
+				// x,y,cnt, dir
+				micros[i] = new Micro(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
+						Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 			}
-			System.out.println("#" + tc + " " + move());
+
+			int result = 0;
+
+			// 1. M시간동안 진행
+			for (int time = 0; time < M; time++) {
+				for (int i = 0; i < K; i++) {
+					if (micros[i].isDead)
+						continue; // 죽었으면 건너뜀
+
+					Micro now = micros[i];
+
+					// 2. 군집들 한칸 이동
+					int nx = now.x + dx[now.dir];
+					int ny = now.y + dy[now.dir];
+
+					// 3. 약품 처리(반 줄이고 반대방향)
+					if (nx == 0 || nx == N - 1 || ny == 0 || ny == N - 1) {
+						now.total = now.cnt /= 2; // total 값도 줄여야함.
+						// 죽었을 때 처리
+						if (now.cnt == 0) {
+							now.isDead = true;
+							continue;
+						}
+
+						if (now.dir % 2 == 0)
+							now.dir -= 1;
+						else
+							now.dir += 1;
+					}
+					now.x = nx;
+					now.y = ny;
+
+					// 4. 병합: 처음일 때랑 2개 이상 만날 때
+					if (board[nx][ny] == null) {
+						board[nx][ny] = now;
+					} else {
+						Micro exist = board[nx][ny];
+
+						// 이미 존재하던 군집이 큰경우
+						if (exist.cnt > now.cnt) {
+							board[nx][ny].total += now.cnt;
+							now.isDead = true; // now 없애기
+						} else {
+							// now가 큰 경우:board에 now를 넣고 now 정보를 갱신
+							now.total += board[nx][ny].total;
+							board[nx][ny].isDead = true;
+							board[nx][ny] = now;
+						}
+					}
+
+				}
+				// micros 갱신
+				result = reset();
+			}
+
+			System.out.printf("#%d %d\n", tc, result);
 		}
+
 	}
-	
-	static int move() { // 살아있는 미생물 수 리턴
-		
-		// M시간동안 군집 이동 처리
-		int time = M, nr, nc, remainCnt = 0;
-		
-		while(time-- > 0) {
-			for (Micro cur : list) {
-				if(cur.isDead) continue; // 리스트에서 삭제하지 않았으므로 건너뛰도록 처리 필요
-				
-				// 1. 한칸 이동
-				nr = cur.r += dr[cur.dir];
-				nc = cur.c += dc[cur.dir];
-				
-				// 2. 약품 칸 처리
-				if(nr == 0 || nr == N-1 || nc == 0 || nc == N-1) {
-					// 군집 줄이고 방향 바꿈, 0이면 소멸
-					cur.total = cur.cnt = cur.cnt / 2;
-					if(cur.cnt == 0) {
-						cur.isDead = true;
-						continue;
-					}
-					
-					// 소멸 안하면 방향 반대로
-					if(cur.dir % 2 == 1) cur.dir++;
-					else cur.dir--;
-				}
-				
-				// 3. 군집 병합
-				if(map[nr][nc] == null) { // 그 셀에 처음 도착하는 군집
-					map[nr][nc] = cur; 
-					
-				}else { // 나중에 도착하는 군집(다른 군집이 있는 경우)
-					// 군집의 미생물 크기로 비교해 큰쪽으로 흡수, 작은 건 소멸
-					if(map[nr][nc].cnt > cur.cnt) {
-						map[nr][nc].total += cur.cnt;
-						cur.isDead = true;
-					}else { // 나중에 도착한 군집의 크기가 크면
-						cur.total += map[nr][nc].total;
-						map[nr][nc].isDead = true;
-						map[nr][nc] = cur;
-					}
-				}
-				
-			}// end for: 군집리스트 처리
-			
-			remainCnt = reset(); // 현재 시간에 이동한 군집들 정리후 살아있는 미생물 수 받기
-		}// end while: 시간 반복
-		
-		
-		
-		return remainCnt;
-	}
-	
-	static int reset() { // 
-		int total = 0;
+
+	// map 초기화 및 cnt 갱신
+	static int reset() {
+		int result = 0;
 		for (int r = 0; r < N; r++) {
-			for(int c = 0; c < N; c++) {
-				if(map[r][c] == null) continue;
-				// 군집이 있다면 정리
-				map[r][c].cnt = map[r][c].total;
-				total += map[r][c].cnt;
-				map[r][c] = null; // 다음 시간 처리위해 초기화
+			for (int c = 0; c < N; c++) {
+				if (board[r][c] == null)
+					continue;
+				// 존재한다면
+				board[r][c].cnt = board[r][c].total;
+				result += board[r][c].total;
+				board[r][c] = null;
 			}
-			
 		}
-		return total;
+
+		return result;
 	}
-	
-	
 }
