@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,6 +70,7 @@ public class Solution {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		int T = Integer.parseInt(br.readLine().trim());
 
 		for (int tc = 1; tc < T + 1; tc++) {
@@ -115,9 +118,12 @@ public class Solution {
 			double E = Double.parseDouble(br.readLine().trim());// 세율 실수 E 0 <= E <= 1
 			result *= E;
 			
-			System.out.printf("#%d %d\n", tc, Math.round(result));
-
+//			System.out.printf("#%d %d\n", tc, Math.round(result));
+			bw.write(String.format("#%d %d\n", tc, Math.round(result)));
+			bw.flush();
 		}
+		bw.close();
+		br.close();
 	}
 
 }
