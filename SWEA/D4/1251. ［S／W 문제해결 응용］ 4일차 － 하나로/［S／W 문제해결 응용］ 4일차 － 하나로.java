@@ -6,6 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.StringTokenizer;
 
+/*
+ * 크루스칼 알고리즘으로 풀이
+ * 시간복잡도: O(N^2) 공간복잡도: O(E) => O(N^2)
+ * 89,116 kb 메모리 1,037 ms 실행시간
+ */
+
 public class Solution {
 
 	static class Edge implements Comparable<Edge> {
@@ -68,12 +74,13 @@ public class Solution {
 			N = Integer.parseInt(br.readLine().trim());
 			edges = new Edge[N * (N - 1) / 2];
 			parents = new int[N];
-			ArrayList<long[]> xy = new ArrayList<>();
+			long[][] xy = new long[N][2];
 			StringTokenizer st = new StringTokenizer(br.readLine().trim());
 			StringTokenizer st2 = new StringTokenizer(br.readLine().trim());
 			
 			for (int i = 0; i < N; i++) {
-				xy.add(new long[] { Long.parseLong(st.nextToken()), Long.parseLong(st2.nextToken()) });
+				xy[i][0] = Integer.parseInt(st.nextToken());
+				xy[i][1] = Integer.parseInt(st2.nextToken());
 			}
 
 			// 간선 초기화 -> Point Class로도 가능
@@ -81,10 +88,9 @@ public class Solution {
 			for (int i = 0; i < N - 1; i++) {
 				for (int j = i + 1; j < N; j++) {
 					if(edgeSize == edges.length) break;
-					long[] xy1 = xy.get(i);
-					long[] xy2 = xy.get(j);
-					long dx = Math.abs(xy1[0] - xy2[0]);
-					long dy = Math.abs(xy1[1] - xy2[1]);
+					
+					long dx = Math.abs(xy[i][0] - xy[j][0]);
+					long dy = Math.abs(xy[i][1] - xy[j][1]);
 					edges[edgeSize] = new Edge(i, j, dx * dx + dy * dy);
 					edgeSize++;
 				}
