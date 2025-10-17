@@ -41,12 +41,9 @@ public class Main {
 //			System.out.println(Arrays.toString(switches));
 		}
 
-		for (int i = 0, cnt = 20; i < N; i += cnt) {
-			for (int j = 0; j < cnt; j++) {
-				if(i + j >= N) break; 
-				sb.append(switches[i + j]).append(" ");
-			}
-			sb.append("\n");
+		for (int i = 0; i < N; i++) {
+			sb.append(switches[i]).append(" ");
+			if((i+1) % 20 == 0) sb.append("\n");
 		}
 
 		bw.write(sb.toString());
