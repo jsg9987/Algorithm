@@ -1,6 +1,19 @@
 import java.io.*;
 import java.util.*;
 
+/*
+ * 아이디어: BFS와 DP 중 고민함. DP 규칙을 찾으려 했으나 아무리 해도 최소 부분 문제라고 판단되지 않아 BFS 시간복잡도를 계산하고 진행했음.
+ * 하지만 BFS를 구현하는 도중 3차원 방문처리를 하려했으나 루트가 다르나 같은 지점으로 들어오는 모든 경우를 중복처리하면 안됐었음.
+ * 따라서 시간복잡도가 O(NM)이 아니라 O(3^k)였다. k는 깊어지는 범위 -> 최대 10000임.
+ * DP로 풀어야했다.
+ * 
+ * 복기
+ * 위로 가는 것이 불가능하기에 DAG 그래프에 해당함. 따라서 DP로 구현 가능함.
+ * 아래, 왼, 오른쪽에서 오는 DP를 3번에 걸쳐 갱신해 최대값을 갱신해야함. 다만 한 배열에서 해버린다면 왼쪽 -> 오른쪽 / 오른쪽 -> 왼쪽의 가는 길의 결과값이 섞여버리기에
+ * 2개로 나눠서 처리해야했음.
+ * 시간복잡도: O(N*M)
+ * 공간복잡도: O(N*M)
+ */
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
